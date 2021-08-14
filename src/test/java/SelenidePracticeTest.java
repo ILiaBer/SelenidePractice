@@ -10,32 +10,27 @@ import java.time.format.DateTimeFormatter;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
-import static org.junit.jupiter.api.Assertions.*;
-
 class SelenidePracticeTest {
 
-    //    This is date logic
     public String date(int days, String format) {
         return LocalDate.now().plusDays(days).format(DateTimeFormatter.ofPattern(format));
     }
 
-    // This is logic for delete string value
-    public String delete() {
-        return Keys.chord(Keys.CONTROL, "a") + Keys.DELETE;
+    public void clearDateInput() {
+        $("[data-test-id='date'] .input__control")
+                .sendKeys(Keys.chord(Keys.CONTROL, "a") + Keys.DELETE);
     }
-
     @BeforeEach
     void setUp() {
         open("http://localhost:9999/");
     }
 
     @Test
-    void shouldReservedDate() {
-        String meetDate = date(3, "dd.MM.yyyy");
-        String deleteString = delete();
+    void shouldReservedDate() { String meetDate = date(3, "dd.MM.yyyy");
+
         $("[data-test-id='city'] .input__box .input__control[placeholder='Город']").setValue("Санкт-Петербург");
         $("[data-test-id='date'] .input__box .input__control[placeholder='Дата встречи']")
-                .setValue(deleteString);
+                .setValue(clearDateInput());
         $("[data-test-id='date'] .input__box .input__control[placeholder='Дата встречи']")
                 .setValue(String.valueOf(meetDate));
         $("[data-test-id='name'] .input__box .input__control[name='name']").setValue("Тапочек Ильяс");
